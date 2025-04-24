@@ -215,9 +215,10 @@ def gen_matrix(
     kv_size = batch.kv_cache_size(model_config) 
     kv_slice_size = kv_size / prefill_worker_config.tp / prefill_worker_config.pp / prefill_worker_config.cp
 
-    cp_factor = prefill_worker_config.cp / decode_worker_config.cp
-
     num_peers = decode_worker_config.tp / prefill_worker_config.tp / prefill_worker_config.cp
+    if num_peers % 1 != 0:
+        raise ValueError(f"Prefill TP*Prefill CP must be a divisor of decode TP")
+    num_peers = int(num_peers)
     buf_size = kv_slice_size / num_peers
 
     #print(f"kv_size: {format_size(kv_size)}, kv_slice_size: {format_size(kv_slice_size)}, buf_size: {format_size(buf_size)}, num_peers: {num_peers}")
