@@ -179,7 +179,7 @@ class SequentialCTPerftest(CTPerftest):
             tp_sizes_gb = [ self._get_tp_total_size(tp)/1E9 for tp in self.traffic_patterns ]
 
             if self.my_rank == 0:
-                headers = ["TP size (GB)", "Latency (ms)", "Isolated Latency (ms)", "Num Senders"]
+                headers = ["Transfer size (GB)", "Latency (ms)", "Isolated Latency (ms)", "Num Senders"]  
                 data = [
                     [tp_sizes_gb[i], tp_latencies[i]*1E3, isolated_tp_latencies[i]*1E3, len(tp.senders_ranks())]
                     for i, tp in enumerate(self.traffic_patterns)
